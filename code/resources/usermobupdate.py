@@ -8,14 +8,8 @@ class UserMobUpdate(Resource):
     parser = reqparse.RequestParser()
 
     parser.add_argument('mobNum', type=str, required=True,
-                        help='mobile number is mandatory')
-    parser.add_argument('idCard', type=str, required=True,
                         help='WorkerId is mandatory')
-    parser.add_argument('id', type=int, required=True,
-                        help='id is mandatory')
-    # parser.add_argument('idCard', type=str, required=True,
-    #                     help='WorkerId is mandatory')
-   
+
     #
     # @jwt_required()
 

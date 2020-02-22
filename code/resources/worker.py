@@ -19,13 +19,19 @@ class Worker(Resource):
             return worker.json()
         return {'message': 'worker not found'}, 404
 
+    # def get(self, workerId):
+
+    #     worker = WorkerModel.find_by_id(workerId)
+    #     if worker:
+    #         return worker.json()
+    #     return {'message': 'worker not found'}, 404
+
     def post(self, mobNum):
 
         if WorkerModel.find_by_name(mobNum):
             return {'message': 'An worker with mobNum {} alerady exists'
                     .format(mobNum)}, 400
         data = Worker.parser.parse_args()
-        #data = request.get_json()
         worker = WorkerModel(mobNum, **data)
         try:
             worker.save_to_db()
@@ -59,3 +65,22 @@ class WorkerList(Resource):
     # @jwt_required()
     def get(self):
         return {'workers': [x.json() for x in WorkerModel.query.all()]}
+
+
+class WorkerById(Resource):
+    # @jwt_required()
+    def get(self, workerId):
+        worker = WorkerModel.find_by_id(workerId)
+        if worker:
+            return worker.json()
+        return {'message': 'worker not found'}, 404
+
+
+class WorkerBySkillId(Resource):
+    # @jwt_required()
+    def get(self, _skillid):
+        worker = WorkerModel.find_by_skillid(_skillid)
+        print(worker)
+        if worker:
+            return {'workers': [x.json() for x in worker]}
+        return {'message': 'worker not found'}, 404

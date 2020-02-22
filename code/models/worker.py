@@ -21,14 +21,14 @@ class WorkerModel(db.Model):
     skillId = db.Column(db.Integer, db.ForeignKey('skills.id'))
     skill = db.relationship('SkillModel')
 
-    def __init__(self, mobNum, idCard, skillId, id):
+    def __init__(self, mobNum, idCard, skillId):
 
         self.mobNum = mobNum
         self.idCard = idCard
         self.skillId = skillId
 
     def json(self):
-        return {'mobNum': self.mobNum,
+        return {'mobNum': self.mobNum, 'id': self.id,
                 "idCard": self.idCard, 'skill_id': self.skillId}
 
     @classmethod
@@ -38,6 +38,10 @@ class WorkerModel(db.Model):
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
+
+    @classmethod
+    def find_by_skillid(cls, _skillid):
+        return cls.query.filter_by(skillId=_skillid)
 
     def save_to_db(self):
 
