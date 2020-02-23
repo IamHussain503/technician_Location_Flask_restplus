@@ -5,12 +5,11 @@ from models.rating import RatingModel
 
 class Rating(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('userId', type=int, required=True,
-                        help='userId field can not be left blank')
-    parser.add_argument('workerId', type=int, required=True,
-                        help='rating field can not be left blank')
     parser.add_argument('rating', type=int, required=True,
-                        help='rating field can not be left blank')
+                        help='userId field can not be left blank')
+    parser.add_argument('comments', type=str, required=False,
+                        help='rating field can not be left blank',
+                        action='append')
 
     # @jwt_required()
     def get(self, userId, workerId):
@@ -22,6 +21,7 @@ class Rating(Resource):
 
     def post(self, userId, workerId):
         data = Rating.parser.parse_args()
+        print(data)
         if RatingModel.find_by_name(userId, workerId):
             return {'message': 'An rating with userId, workerId {} alerady exists'
                     .format(userId, workerId)}, 400
@@ -35,14 +35,29 @@ class Rating(Resource):
 
         return rating.json(), 201
 
-    def put(self, userId, workerId):
-        data = Rating.parser.parse_args()
-        # updated_worker = RatingModel(userId, workerId, data**)
-        rating = RatingModel.find_by_name(userId, workerId)
-        if rating is None:
-            rating = RatingModel(userId, workerId, **data)
-        else:
-            rating = RatingModel(userId, workerId, **data)
 
-        rating.save_to_db()
-        return rating.json()
+class RatingUpdate(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('rating', type=int, required=True,
+                        help='userId field can not be left blank')
+    parser.add_argument('comments', type=str, required=False,
+                        help='rating field can not be left blank',
+                        action='append')
+    parser.add_argument('workerId', type=int, required=True,
+                        help='userId field can not be left blank')
+    parser.add_argument('userId', type=int, required=True,
+                        help='rating field can not be left blank',
+                        action='append')
+
+    def put(self, ratingId):
+
+        data = RatingUpdate.parser.parse_args()
+        rating = RatingModel.find_by_ratingid(ratingId)
+        if rating:
+            rating.comments = data['comments']
+            rating.rating = data['rating']
+
+            rating.save_to_db()
+            return rating.json()
+        else:
+            return {'message': 'there is no rating found for this user'}, 400

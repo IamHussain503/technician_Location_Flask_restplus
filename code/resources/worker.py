@@ -80,7 +80,7 @@ class WorkerBySkillId(Resource):
     # @jwt_required()
     def get(self, _skillid):
         worker = WorkerModel.find_by_skillid(_skillid)
-        print(worker)
+        # print(worker)
         if worker:
             return {'workers': [x.json() for x in worker]}
         return {'message': 'worker not found'}, 404

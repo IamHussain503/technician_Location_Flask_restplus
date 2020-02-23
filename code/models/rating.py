@@ -24,12 +24,17 @@ class RatingModel(db.Model):
         self.comments = comments
 
     def json(self):
-        return {'userId': self.userId, "workerId": self.workerId,
+        return {'id': self.id, 'userId': self.userId,
+                "workerId": self.workerId,
                 'rating': self.rating, 'comments': self.comments}
 
     @classmethod
     def find_by_name(cls, userId, workerId):
         return cls.query.filter_by(userId=userId, workerId=workerId).first()
+    
+    @classmethod
+    def find_by_ratingid(cls, _ratingId):
+        return cls.query.filter_by(id=_ratingId).first()
 
     def save_to_db(self):
 
