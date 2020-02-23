@@ -61,3 +61,14 @@ class RatingUpdate(Resource):
             return rating.json()
         else:
             return {'message': 'there is no rating found for this user'}, 400
+
+
+class AvgRating(Resource):
+    parser = reqparse.RequestParser()
+
+    def get(self, workerId):
+        rating = RatingModel.avg_by_workerid(workerId)
+        if rating:
+            return rating
+
+        return {'messsage': 'There are no reviews yet'}

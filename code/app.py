@@ -9,7 +9,7 @@ from resources.user import UserRegister, UsersList, UserById, UserByMobile
 from resources.worker import Worker, WorkerList, WorkerById, WorkerBySkillId
 from resources.workermobupdate import WorkerMobUpdate
 from resources.usermobupdate import UserMobUpdate
-from resources.rating import Rating, RatingUpdate
+from resources.rating import Rating, RatingUpdate,AvgRating
 from db import db
 import urllib
 
@@ -43,6 +43,7 @@ api.add_resource(UserById, '/user/<int:userId>')
 api.add_resource(UserByMobile, '/user/mobNum/<string:_mobNum>')
 api.add_resource(Rating, '/rating/<userId>/<workerId>')
 api.add_resource(RatingUpdate, '/rating/<int:ratingId>')
+api.add_resource(AvgRating, '/rating/avg/<int:workerId>')
 
 if __name__ == '__main__':
     db.init_app(app)

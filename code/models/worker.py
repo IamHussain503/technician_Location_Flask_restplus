@@ -7,7 +7,7 @@ class WorkerModel(db.Model):
 
     __tablename__ = 'workers'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     mobNum = db.Column(db.String(80), nullable=False, unique=True)
     # price = db.Column(db.Float(precision=2))
     fName = db.Column(db.String(80), nullable=True)
@@ -18,7 +18,7 @@ class WorkerModel(db.Model):
     joinDate = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     idCard = db.Column(db.String(80))
 
-    skillId = db.Column(db.Integer, db.ForeignKey('skills.id'))
+    skillId = db.Column(db.Integer(), db.ForeignKey('skills.id'))
     skill = db.relationship('SkillModel')
 
     def __init__(self, mobNum, idCard, skillId):

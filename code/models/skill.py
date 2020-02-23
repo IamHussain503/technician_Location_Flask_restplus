@@ -6,7 +6,7 @@ class SkillModel(db.Model):
 
     __tablename__ = 'skills'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80))
 
     workers = db.relationship('WorkerModel', lazy='dynamic')
