@@ -43,19 +43,16 @@ class RatingModel(db.Model):
                         (func.avg(RatingModel.rating))
                         .filter_by(workerId=_workerId)]}
 
+    # @classmethod
+    # def rating_count(cls, _workerId):
+    #     return {'rating_count': [str(c[0]) for c in db.session.query
+    #                              (func.count(RatingModel.rating))
+    #                              .filter_by(workerId=_workerId)]}
+
     @classmethod
     def rating_count(cls, _workerId):
-        return {'rating_count': [str(c[0]) for c in db.session.query
-                                 (func.count(RatingModel.rating))
-                                 .filter_by(workerId=_workerId)]}
-
-    # @classmethod
-    # def distinct_rating_count(cls, _workerId):
-    #     return {'rating_count': [c[0] for c in
-    #                              db.session.query
-    #                              (func.count(distinct(RatingModel.rating)))
-    #                              .filter_by(workerId=_workerId)
-    #                              .group_by(RatingModel.rating)]}
+        return {'count': cls.query.with_entities(func.count(RatingModel.rating))
+                .filter_by(workerId=_workerId).scalar()}
 
     @classmethod
     def distinct_rating_count(cls, _workerId):
