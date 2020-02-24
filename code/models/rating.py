@@ -49,13 +49,22 @@ class RatingModel(db.Model):
                                  (func.count(RatingModel.rating))
                                  .filter_by(workerId=_workerId)]}
 
+    # @classmethod
+    # def distinct_rating_count(cls, _workerId):
+    #     return {'rating_count': [c[0] for c in
+    #                              db.session.query
+    #                              (func.count(distinct(RatingModel.rating)))
+    #                              .filter_by(workerId=_workerId)
+    #                              .group_by(RatingModel.rating)]}
+
     @classmethod
     def distinct_rating_count(cls, _workerId):
-        return {'rating_count': [c[0] for c in
-                                 db.session.query
-                                 (func.count(distinct(RatingModel.rating)))
-                                 .filter_by(workerId=_workerId)
-                                 .group_by(RatingModel.rating)]}
+        rating = dict(cls.query.with_entities
+                      (RatingModel.rating, func.count(
+                          RatingModel.rating))
+                      .group_by(RatingModel.rating)
+                      .filter_by(workerId=_workerId))
+        return rating
 
     def save_to_db(self):
 
