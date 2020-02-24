@@ -1,3 +1,5 @@
+import urllib
+from db import db
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
@@ -9,9 +11,8 @@ from resources.user import UserRegister, UsersList, UserById, UserByMobile
 from resources.worker import Worker, WorkerList, WorkerById, WorkerBySkillId
 from resources.workermobupdate import WorkerMobUpdate
 from resources.usermobupdate import UserMobUpdate
-from resources.rating import Rating, RatingUpdate,AvgRating
-from db import db
-import urllib
+from resources.rating import (Rating, RatingUpdate, AvgRating, RatingCount,
+                              DistinctRatingCount)
 
 
 app = Flask(__name__)
@@ -44,6 +45,8 @@ api.add_resource(UserByMobile, '/user/mobNum/<string:_mobNum>')
 api.add_resource(Rating, '/rating/<userId>/<workerId>')
 api.add_resource(RatingUpdate, '/rating/<int:ratingId>')
 api.add_resource(AvgRating, '/rating/avg/<int:workerId>')
+api.add_resource(RatingCount, '/rating/total/<int:workerId>')
+api.add_resource(DistinctRatingCount, '/rating/distinct/<int:workerId>')
 
 if __name__ == '__main__':
     db.init_app(app)

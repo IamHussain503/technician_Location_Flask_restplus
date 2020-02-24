@@ -22,7 +22,7 @@ class Rating(Resource):
     def post(self, userId, workerId):
         data = Rating.parser.parse_args()
         print(data)
-        if RatingModel.find_by_name(userId, workerId):
+        if RatingModel.find_by_userid_workerid(userId, workerId):
             return {'message': 'An rating with userId, workerId {} alerady exists'
                     .format(userId, workerId)}, 400
 
@@ -64,7 +64,6 @@ class RatingUpdate(Resource):
 
 
 class AvgRating(Resource):
-    parser = reqparse.RequestParser()
 
     def get(self, workerId):
         rating = RatingModel.avg_by_workerid(workerId)
@@ -72,3 +71,23 @@ class AvgRating(Resource):
             return rating
 
         return {'messsage': 'There are no reviews yet'}
+
+
+class RatingCount(Resource):
+
+    def get(self, workerId):
+        ratingcount = RatingModel.rating_count(workerId)
+        if ratingcount:
+            return ratingcount
+        else:
+            return {'message': 'There is no rating yet'}
+
+
+class DistinctRatingCount(Resource):
+
+    def get(self, workerId):
+        ratingcount = RatingModel.distinct_rating_count(workerId)
+        if ratingcount:
+            return ratingcount
+        else:
+            return {'message': 'There is no rating yet'}

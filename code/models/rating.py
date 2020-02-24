@@ -1,7 +1,7 @@
 
 import datetime
 from db import db
-from sqlalchemy import func
+from sqlalchemy import func, distinct
 
 
 class RatingModel(db.Model):
@@ -30,7 +30,7 @@ class RatingModel(db.Model):
                 'rating': self.rating, 'comments': self.comments}
 
     @classmethod
-    def find_by_name(cls, userId, workerId):
+    def find_by_userid_workerid(cls, userId, workerId):
         return cls.query.filter_by(userId=userId, workerId=workerId).first()
 
     @classmethod
@@ -39,12 +39,24 @@ class RatingModel(db.Model):
 
     @classmethod
     def avg_by_workerid(cls, _workerId):
-        # print('/////////////////////////////////',
-        #       db.session.query(func.avg(RatingModel.rating)))
         return {'avg': [str(c[0]) for c in db.session.query
-                (func.avg(RatingModel.rating)).filter_by(workerId=_workerId)]}
+                        (func.avg(RatingModel.rating))
+                        .filter_by(workerId=_workerId)]}
 
     @classmethod
+    def rating_count(cls, _workerId):
+        return {'rating_count': [str(c[0]) for c in db.session.query
+                                 (func.count(RatingModel.rating))
+                                 .filter_by(workerId=_workerId)]}
+
+    @classmethod
+    def distinct_rating_count(cls, _workerId):
+        return {'rating_count': [c[0] for c in
+                                 db.session.query
+                                 (func.count(distinct(RatingModel.rating)))
+                                 .filter_by(workerId=_workerId)
+                                 .group_by(RatingModel.rating)]}
+
     def save_to_db(self):
 
         db.session.add(self)
