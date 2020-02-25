@@ -1,4 +1,4 @@
-
+# how many status of tasks 1) not assigned 2) assigned 3) accomlished 4) expired etc...
 
 from db import db
 

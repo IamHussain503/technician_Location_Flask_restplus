@@ -1,10 +1,10 @@
-
+# list of detailed jobs selected by the customer and calculate estimated price based on number of jobs
 import datetime
 from db import db
 from sqlalchemy import func, distinct
 
 
-class TaskPostModel(db.Model):
+class PostWorkDetailModel(db.Model):
 
     __tablename__ = 'taskpost'
     id = db.Column(db.Integer(), primary_key=True)
