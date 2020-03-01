@@ -3,6 +3,7 @@
 import datetime
 from db import db
 from sqlalchemy import func, distinct
+import sqlite3
 
 
 class SubSkillModel(db.Model):
@@ -14,10 +15,18 @@ class SubSkillModel(db.Model):
     skillId = db.Column(db.Integer(), db.ForeignKey('skills.id'))
     skill = db.relationship('SkillModel')
 
-    def __init__(self, SubSkillModel, skillId):
+    def __init__(self, subSkillDetail, skillId):
 
         self.subSkillDetail = subSkillDetail
         self.skillId = skillId
+
+    def json(self):
+        return {'id': self.id, 'subSkillDetail': self.subSkillDetail}
+
+    @classmethod
+    def find_by_skillid(cls, _skillId):
+        print(cls.query.filter_by(skillId=_skillId))
+        return cls.query.filter_by(skillId=_skillId)
 
     def save_to_db(self):
 

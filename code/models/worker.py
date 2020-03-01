@@ -1,4 +1,4 @@
-
+import sqlite3
 import datetime
 from db import db
 
@@ -17,6 +17,8 @@ class WorkerModel(db.Model):
     email = db.Column(db.String(80), nullable=True)
     joinDate = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     idCard = db.Column(db.String(80))
+    yrsExp = db.Column(db.Integer(), default=0)
+    expVerify = db.Column(db.Boolean, unique=False, default=False)
 
     skillId = db.Column(db.Integer(), db.ForeignKey('skills.id'))
     skill = db.relationship('SkillModel')
@@ -41,6 +43,7 @@ class WorkerModel(db.Model):
 
     @classmethod
     def find_by_skillid(cls, _skillid):
+        print(cls.query.filter_by(skillId=_skillid))
         return cls.query.filter_by(skillId=_skillid)
 
     def save_to_db(self):

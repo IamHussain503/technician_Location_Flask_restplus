@@ -2,6 +2,7 @@
 import datetime
 from db import db
 from sqlalchemy import func, distinct
+import sqlite3
 
 
 class RatingModel(db.Model):
@@ -16,6 +17,8 @@ class RatingModel(db.Model):
     user = db.relationship('UserModel')
     workerId = db.Column(db.Integer(), db.ForeignKey('workers.id'))
     worker = db.relationship('WorkerModel')
+    taskId = db.Column(db.Integer(), db.ForeignKey('tasks.id'))
+    task = db.relationship('TaskModel')
 
     def __init__(self, userId, workerId, rating, comments):
 
@@ -23,11 +26,12 @@ class RatingModel(db.Model):
         self.workerId = workerId
         self.rating = rating
         self.comments = comments
+        seld.taskId = taskId
 
     def json(self):
         return {'id': self.id, 'userId': self.userId,
                 "workerId": self.workerId,
-                'rating': self.rating, 'comments': self.comments}
+                'rating': self.rating, 'comments': self.comments, 'taskId': self.taskId}
 
     @classmethod
     def find_by_userid_workerid(cls, userId, workerId):
