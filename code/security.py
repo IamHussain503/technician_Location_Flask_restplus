@@ -1,6 +1,7 @@
 # to compare different encoding strings safelya nd securely
 from werkzeug.security import safe_str_cmp
 from models.user import UserModel
+import sqlite3
 
 
 def authenticate(username, password):
